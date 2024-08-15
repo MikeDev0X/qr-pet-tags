@@ -10,6 +10,8 @@ export interface IDBSettings {
     database: string
 }
 
+export const database = 'petqr';
+
 export const GetDBSettings = (): IDBSettings => {
     //const env = process.env.NODE_ENV
 

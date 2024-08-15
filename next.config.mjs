@@ -1,13 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {experimental: {
-    appDir: true,
-},
+const nextConfig = {
 env: {
-    host: 'localhost',
-    port: '3306',
-    user: 'root',
-    password: '',
-    database: 'petQR_database'
+        host: 'localhost',
+        port: '3306',
+        user: 'root',
+        password: '',
+        database: 'petqr'
     }
 };
 
