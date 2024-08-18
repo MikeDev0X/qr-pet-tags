@@ -53,12 +53,12 @@ export async function GET(request: NextRequest) {
                     .setProtectedHeader({ alg: 'HS256' })
                     .setJti(nanoid())
                     .setIssuedAt()
-                    .setExpirationTime('1 minute') // Token expires in 1 minute
+                    .setExpirationTime('1 day') // Token expires in 1 minute
                     .sign(secret);
 
                 const cookieOptions = {
                     path: '/',
-                    maxAge: 60,
+                    maxAge: 60 * 60 * 24,
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict' as 'strict' | 'lax' | 'none',
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
 
         if (count > 0) {
             // User already exists
-            response = NextResponse.json({ message: 'User already exists.' }, { status: 409 });
+            response = NextResponse.json({ message: 'User already exists' }, { status: 409 });
             return response;
         }
         else{

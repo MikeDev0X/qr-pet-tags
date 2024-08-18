@@ -8,7 +8,6 @@ import Image from "next/image";
 export default function Login() {
     const bg1 = "/main-backgrounds/bg1.png";
     const [pwOpened, setPwOpened]= useState<string> ('password');
-
     const [email, setEmail] = useState<string> ('');
     const [password, setPassword] = useState<string>('');
 
@@ -29,7 +28,6 @@ export default function Login() {
     }) => {
         setPassword(e.target.value);
     }
-
 
     const login = async () =>{
 
@@ -52,7 +50,6 @@ export default function Login() {
                 }
 
                 
-
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -76,7 +73,7 @@ export default function Login() {
                 </span>
 
                 <div className={page.credentials}>
-                        <img src="/icons/userIcon.png" alt="user icon" width="30" height="auto"/>
+                        <img src="/icons/emailIcon.png" alt="user icon" width="30" height="auto"/>
                         <form action="">
 
                         <input type="text" placeholder="ejemplo@hotmail.com" className={page.fillIn} onChange={handleEmail} />
@@ -89,8 +86,12 @@ export default function Login() {
                 <div className={page.credentials}>
                     <img src="/icons/passwordIcon.png" alt="user icon" width="28" height="auto"/>
                     
+                    <form action="">
 
-                    <input type={pwOpened} placeholder="••••••••••••" className={page.fillIn} style={{ marginRight: '-2em' }} onChange={handlePassword} />
+                        <input type={pwOpened} placeholder="••••••••••••" className={page.fillIn} style={{ marginRight: '-2em' }} onChange={handlePassword} />
+
+                    </form>
+                    
                     <button onClick={() => openEye()} className={page.eye}>
                         <img src={`/icons/${pwOpened === 'text' ? 'eyeOpened.png' : 'eyeClosed.png'}`} alt="password shown" width="20" />
                     </button>
