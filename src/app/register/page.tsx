@@ -96,8 +96,6 @@ export default function Register() {
                             }
                         }
 
-
-
                     } catch (error) {
                         console.error('Error fetching data:', error);
                     }
@@ -115,7 +113,13 @@ export default function Register() {
             backgroundPosition: "center",
             width: "100vw",
             height: "100vh"
-        }}>
+        }}
+            onKeyDown={e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    register();
+                }
+            }}>
 
             <div className={page.mainContainer}>
 
@@ -127,10 +131,9 @@ export default function Register() {
 
                 <div className={page.credentials}>
                     <img src="/icons/emailIcon.png" alt="user icon" width="30" height="auto" />
-                    <form action="">
 
                         <input type="text" placeholder="Correo electrónico" className={page.fillIn} onChange={handleEmail} />
-                    </form>
+
                     <div className={page.phantomDiv}>
 
                     </div>
@@ -138,10 +141,9 @@ export default function Register() {
 
                 <div className={page.credentials}>
                     <img src="/icons/userIcon.png" alt="user icon" width="30" height="auto" />
-                    <form action="">
 
                         <input type="text" placeholder="Nombre completo" className={page.fillIn} onChange={handleName} />
-                    </form>
+
                     <div className={page.phantomDiv}>
 
                     </div>
@@ -150,9 +152,7 @@ export default function Register() {
                 <div className={page.credentials}>
                     <img src="/icons/passwordIcon.png" alt="user icon" width="28" height="auto" />
 
-                    <form action="">
-                        <input type="text" placeholder="Contraseña" className={page.fillIn} style={{ marginRight: '-2em' }} onChange={handlePassword} />
-                    </form>
+                        <input type="text" placeholder="Contraseña" className={page.fillIn} style={{ marginRight: '-1.9em' }} onChange={handlePassword} />
 
                     <img src={`/icons/${pwOpened}.png`} alt="password shown" width="20" />
                     
@@ -162,18 +162,19 @@ export default function Register() {
                 <div className={page.credentials}>
                     <img src="/icons/passwordIcon.png" alt="user icon" width="28" height="auto" />
 
-                    <form action="">
-                        <input type="text" placeholder="Confirmar contraseña" className={page.fillIn} style={{ marginRight: '-2em' }} onChange={handleConfirm} />
-                    </form>
+                        <input type="text" placeholder="Confirmar contraseña" className={page.fillIn} style={{ marginRight: '-1.9em' }} onChange={handleConfirm} />
 
                     <img src={`/icons/${pwOpened}.png`} alt="password shown" width="20" />
 
                 </div>
 
-                <button className={page.login} onClick={() => register()}>
-                    Registrarme
-                </button>
+                <footer>
 
+                    <button className={page.login} onClick={() => register()}>
+                        Registrarme
+                    </button>
+
+                </footer>
             </div>
 
 

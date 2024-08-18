@@ -62,9 +62,16 @@ export default function Login() {
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         width: "100vw",
-                        height: "100vh"}}>
+                        height: "100vh"}}
+                        
+            onKeyDown={e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    login();
+                }
+            }}>
 
-            <div className={page.mainContainer}>
+            <div className={page.mainContainer} >
 
                 <Image src="/main-backgrounds/logo.png" alt="logo" width={200} height={200}/>
 
@@ -74,34 +81,32 @@ export default function Login() {
 
                 <div className={page.credentials}>
                         <img src="/icons/emailIcon.png" alt="user icon" width="30" height="auto"/>
-                        <form action="">
 
-                        <input type="text" placeholder="ejemplo@hotmail.com" className={page.fillIn} onChange={handleEmail} />
-                        </form>
-                        <div className={page.phantomDiv}>
-                            
+                            <input type="text" placeholder="ejemplo@hotmail.com" className={page.fillIn} onChange={handleEmail} />
+
+                        <div className={page.phantomDiv}> 
                         </div>
                 </div>
 
                 <div className={page.credentials}>
                     <img src="/icons/passwordIcon.png" alt="user icon" width="28" height="auto"/>
                     
-                    <form action="">
+                        <input type={pwOpened} placeholder="••••••••••••" className={page.fillIn} style={{ marginRight: '-1.9em' }} onChange={handlePassword} />
 
-                        <input type={pwOpened} placeholder="••••••••••••" className={page.fillIn} style={{ marginRight: '-2em' }} onChange={handlePassword} />
-
-                    </form>
-                    
                     <button onClick={() => openEye()} className={page.eye}>
                         <img src={`/icons/${pwOpened === 'text' ? 'eyeOpened.png' : 'eyeClosed.png'}`} alt="password shown" width="20" />
                     </button>
 
                 </div>
 
-                <button className={page.login} onClick={()=> login()}>
+                <footer>
+
+                    <button tabIndex={0} className={page.login} onClick={() => login()}>
                     Ingresar
                 </button>
 
+
+                </footer>
             </div>
 
 
