@@ -8,13 +8,20 @@ import mysql, { RowDataPacket } from 'mysql2/promise'
 
 const connectionParams = GetDBSettings();
 
+type userData = {
+    email: string;
+    userType: string;
+    fullName: string;
+    passW: string;
+}
+
 export async function GET(request: NextRequest) {
-    let connection;
+    let connection ;
     try {
         
         connection = await mysql.createConnection(connectionParams);
-        const query = `SELECT fullName FROM ${database}.user_ WHERE email=?`;
-        const query2 = `SELECT passW FROM user_ WHERE email=?`;
+        const query : string = `SELECT fullName FROM ${database}.user_ WHERE email=?`;
+        const query2 : string = `SELECT passW FROM user_ WHERE email=?`;
 
         const { searchParams } = new URL(request.url);
         const user: string | null = searchParams.get('email');
@@ -84,6 +91,60 @@ export async function GET(request: NextRequest) {
             connection.end();
         }
     }
-    
-    //return NextResponse.redirect(new URL('/register', request.url));
+}
+
+
+export async function POST(request: NextRequest) {
+
+    let connection;
+    const data : userData = await request.json();
+
+    const { email, userType, fullName, passW} : userData = data;
+
+    if (!email || !userType || !fullName || !passW) {
+        return NextResponse.json({ error: 'name, email, and password are required in the request body.' });
+    }
+
+
+    try {
+
+        connection = await mysql.createConnection(connectionParams);
+        let response: NextResponse = NextResponse.json({ message: '' });
+
+        // check if the user already exists
+        const checkQuery = `SELECT COUNT(*) as count FROM ${database}.user_ WHERE email = ?`;
+        const [checkResult] = await connection.execute(checkQuery, [email]);
+        const count = (checkResult as any)[0].count;
+
+        if (count > 0) {
+            // User already exists
+            response = NextResponse.json({ message: 'User already exists.' }, { status: 409 });
+            return response;
+        }
+        else{
+
+            const query: string = `INSERT INTO ${database}.user_ (email, userType, fullName, passW)
+                           VALUES (?, ?, ?, ?)`;
+            const [results] = await connection.execute(query, [email, userType, fullName, passW]);
+
+            if(results)
+                response = NextResponse.json({ message: `User added successfully` });
+        }
+
+        return response;
+
+    } catch (err) {
+        console.error('ERROR: API - ', (err as Error).message);
+
+        return NextResponse.json({
+            error: (err as Error).message,
+            returnedStatus: 500,
+        }, { status: 500 });
+
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+
 }
