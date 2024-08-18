@@ -105,7 +105,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'name, email, and password are required in the request body.' });
     }
 
-
     try {
 
         connection = await mysql.createConnection(connectionParams);
@@ -116,6 +115,8 @@ export async function POST(request: NextRequest) {
         const [checkResult] = await connection.execute(checkQuery, [email]);
         const count = (checkResult as any)[0].count;
 
+        const hashedPw = crypto.createHash('sha256').update(passW).digest('hex');
+
         if (count > 0) {
             // User already exists
             response = NextResponse.json({ message: 'User already exists' }, { status: 409 });
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
 
             const query: string = `INSERT INTO ${database}.user_ (email, userType, fullName, passW)
                            VALUES (?, ?, ?, ?)`;
-            const [results] = await connection.execute(query, [email, userType, fullName, passW]);
+            const [results] = await connection.execute(query, [email, userType, fullName, hashedPw]);
 
             if(results)
                 response = NextResponse.json({ message: `User added successfully` });

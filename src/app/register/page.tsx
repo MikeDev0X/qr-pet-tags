@@ -15,10 +15,6 @@ export default function Register() {
 
     const [pwOpened, setPwOpened] = useState<string>('redCheckIcon');
 
-    /* const passwordCheck = () => {
-        
-    } */
-
     useEffect(()=>{
         (password === confirmPassword && password !== '' && confirmPassword !== '') ? setPwOpened("greenCheckIcon") : setPwOpened("redCheckIcon");
     },[password, confirmPassword])
