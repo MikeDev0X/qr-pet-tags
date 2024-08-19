@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import page from "./register.module.css";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Head from "next/head";
 
 export default function Register() {
     const bg2 = "/main-backgrounds/bg2.png";
@@ -14,6 +15,15 @@ export default function Register() {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
 
     const [pwOpened, setPwOpened] = useState<string>('redCheckIcon');
+
+    useEffect(() => {
+        const preloadImage = (src: string) : void=> {
+            const img: HTMLImageElement = document.createElement('img');
+            img.src = src;
+        };
+
+        preloadImage('/main-backgrounds/logo.png');
+    }, []);
 
     useEffect(()=>{
         (password === confirmPassword && password !== '' && confirmPassword !== '') ? setPwOpened("greenCheckIcon") : setPwOpened("redCheckIcon");
@@ -107,6 +117,9 @@ export default function Register() {
     }
 
     return (
+
+        
+
         <main style={{
             backgroundImage: `url(${bg2})`,
             backgroundSize: "cover",
@@ -121,6 +134,10 @@ export default function Register() {
                 }
             }}>
 
+            <Head>
+                <link rel="preload" href="/main-backgrounds/logo.png" as="image" />
+            </Head>
+            
             <div className={page.mainContainer}>
 
                 <Image src="/main-backgrounds/logo.png" alt="logo" width={200} height={200} />

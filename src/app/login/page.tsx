@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import page from "./login.module.css";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Login() {
     const bg1 = "/main-backgrounds/bg1.png";
@@ -98,6 +99,9 @@ export default function Login() {
                     </button>
 
                 </div>
+
+
+                <span className={page.gotoLogin}> ¿Aún no tienes cuenta? <Link href="/register" className={page.link}> regístrate aquí </Link></span>
 
                 <footer>
 
