@@ -34,7 +34,7 @@ export default function Login() {
 
         if(email.length !== 0 && password.length !== 0){
             try {
-                const response = await fetch(`/api/user?email=${email}&password=${password}`);
+                const response = await fetch(`/api/login?email=${email}&password=${password}`);
                 if (!response.ok) {
                     throw new Error(`Error (status: ${response.status}, statusText: ${response.statusText})`)
                 }
