@@ -4,8 +4,7 @@ import crypto from 'crypto';
 import { SignJWT } from 'jose';
 import { nanoid } from 'nanoid';
 import { privateKey } from '../../../helpers/sampleENV';
-import mysql, { RowDataPacket } from 'mysql2/promise'
-
+import mysql, { RowDataPacket } from 'mysql2/promise';
 const connectionParams = GetDBSettings();
 
 type userData = {
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest) {
     try {
         
         connection = await mysql.createConnection(connectionParams);
-        const query : string = `SELECT fullName FROM ${database}.user_ WHERE email=?`;
+        const query : string = `SELECT fullName, userType FROM ${database}.user_ WHERE email=?`;
         const query2 : string = `SELECT passW FROM user_ WHERE email=?`;
 
         const { searchParams } = new URL(request.url);
@@ -42,12 +41,20 @@ export async function GET(request: NextRequest) {
             const passwordRow = passwordResult as RowDataPacket;
             const retrievedPassword = passwordRow[0]?.passW;
 
+            const query1Row = results as RowDataPacket;
+            const fullName = query1Row[0]?.fullName;
+            const userType = query1Row[0]?.userType;
+
             if (hashInputPw === retrievedPassword) {
                 const payload = {
                     userEmail: user,
+                    fullName: fullName,
+                    userType: userType 
                 };
 
                 const secret = new TextEncoder().encode(privateKey);
+
+                //console.log(payload);
 
                 const token = await new SignJWT(payload)
                     .setProtectedHeader({ alg: 'HS256' })
@@ -56,16 +63,26 @@ export async function GET(request: NextRequest) {
                     .setExpirationTime('1 day') // Token expires in 1 minute
                     .sign(secret);
 
+                const cookieValue = JSON.stringify({
+                    token,
+                    userType,
+                });
+
                 const cookieOptions = {
                     path: '/',
                     maxAge: 60 * 60 * 24,
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === 'production',
+                    httpOnly: false,
                     sameSite: 'strict' as 'strict' | 'lax' | 'none',
                 };
                 
-                response = NextResponse.json({ message: `Token set successfully` });
-                response.cookies.set('authToken',token, cookieOptions);
+                if( userType === 'admin'){
+                    response = NextResponse.json({ message: `admin` });
+                }
+                else{
+                    response = NextResponse.json({ message: `user` });
+                }
+                
+                response.cookies.set('cookieValue',cookieValue, cookieOptions);
                 return response;
             }
             else{

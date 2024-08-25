@@ -4,7 +4,7 @@ import { jwtVerify } from 'jose';
 import { privateKey } from '../src/helpers/sampleENV';
 const middleware = async (request: NextRequest) =>{
     
-    const token = request.cookies.get('authToken')?.value;
+    const token = request.cookies.get('cookieValue')?.value;
     const loginUrl = new URL('/login', request.url);
     const pathname = request.nextUrl.pathname;
 

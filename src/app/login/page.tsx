@@ -2,17 +2,36 @@
 
 import { useRouter } from "next/navigation";
 import page from "./login.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import getCookieValue from "@/helpers/common";
 
 export default function Login() {
     const bg1 = "/main-backgrounds/bg1.png";
     const [pwOpened, setPwOpened]= useState<string> ('password');
     const [email, setEmail] = useState<string> ('');
     const [password, setPassword] = useState<string>('');
-
+    const [cookieValue, setCookieValue] = useState<any>(null);
     const router = useRouter();
+
+    useEffect(() => {
+        
+        const rawCookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)cookieValue\s*=\s*([^;]*).*$)|^.*$/, "$1");
+        const decodedCookieValue = decodeURIComponent(rawCookieValue);
+        const cookieValue = JSON.parse(decodedCookieValue);
+        
+        setCookieValue(cookieValue);
+    }, []);
+    
+    useEffect(()=>{
+        if (cookieValue) {
+
+            router.push(`/${cookieValue.userType}`);
+        }
+    },[cookieValue])
+
+    
 
     const openEye = () =>{
         pwOpened === "password" ? setPwOpened("text") : setPwOpened("password");
@@ -42,10 +61,14 @@ export default function Login() {
                     const json = await response.json();
                     const status = json.message;
 
+                    console.log(status);
                     if (status === "Incorrect credentials") {
                         alert('Credenciales Incorrectas');
                     }
-                    else if (status === "Token set successfully") {
+                    else if (status === "admin") {
+                        router.push('/admin');
+                    }
+                    else if(status === 'user'){
                         router.push('/register');
                     }
                 }
