@@ -3,6 +3,7 @@ import UpperPage from "@/components/upperPage";
 import page from './admin.module.css';
 import { useState } from "react";
 import AdminSelection from "@/components/adminSelection";
+import Finder from "@/components/finder";
 
 
 export default function Admin() {
@@ -25,7 +26,7 @@ export default function Admin() {
                 }
                 
                 {
-                    buttonPressed === 'qr' && <div>a</div>
+                    buttonPressed === 'qr' && <Finder/>
                 }
 
 

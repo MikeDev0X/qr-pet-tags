@@ -35,23 +35,21 @@ export async function POST(request: NextRequest) {
     try {
         let response: NextResponse = NextResponse.json({ message: '' });
 
-        const data = await request.json();
-
         const { quantity, endpointType, existingQR } : qr = await request.json();
 
         if (!quantity || !endpointType || !existingQR) {
-            return NextResponse.redirect(new URL('/login', request.url));
+            response = NextResponse.json('Faltan parámetros');
+            return response;
         }
         else{
 
-            const query = `INSERT INTO ${database}.qr (idQr, isActive, planType)
+            const query = `INSERT INTO ${database}.qr (qrText, isActive, planType)
                            VALUES (?, ?, ?)`;
 
 
             // create from scratch case
             if(endpointType === 'fromScratch'){
 
-                
                 const query2 = `SELECT COUNT(*) as count FROM ${database}.qr WHERE idQr = ?`;
 
                 let currentQr = '';
@@ -91,6 +89,34 @@ export async function POST(request: NextRequest) {
 
         }
 
+        return response;
+
+    } catch (err) {
+        console.error('ERROR: API - ', (err as Error).message);
+
+        return NextResponse.json({
+            error: (err as Error).message,
+            returnedStatus: 500,
+        }, { status: 500 });
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+}
+
+export async function GET(request: NextRequest) {
+
+    let connection = await mysql.createConnection(connectionParams);
+
+    try{
+
+        let response: NextResponse = NextResponse.json({});
+        const query = `SELECT * FROM ${database}.qr ORDER BY idQr DESC`;
+
+        const [list] = await connection.execute(query);
+
+        response = NextResponse.json(list);
         return response;
 
     } catch (err) {

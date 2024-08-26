@@ -1,8 +1,6 @@
 .mainContainer{
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
     background: linear-gradient(#E0FFEB, #95EEC8);
     background-position: center;
     height: 88vh;

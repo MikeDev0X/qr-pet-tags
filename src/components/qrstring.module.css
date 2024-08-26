@@ -1,0 +1,27 @@
+.mainContainer{
+    display: flex;
+    background-color: #DDDDDD;
+    color: black;
+    font-weight: 700;
+
+    width: 25em;
+    height: 2.5em;
+    border: none;
+    border-radius: 0.5em;
+
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+
+    box-shadow: 0 10px 17px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 460px) {
+    .mainContainer {
+        width: 20em;
+        margin-top: 1.7em;
+    }
+
+}

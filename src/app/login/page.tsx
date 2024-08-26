@@ -19,9 +19,12 @@ export default function Login() {
         
         const rawCookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)cookieValue\s*=\s*([^;]*).*$)|^.*$/, "$1");
         const decodedCookieValue = decodeURIComponent(rawCookieValue);
-        const cookieValue = JSON.parse(decodedCookieValue);
-        
-        setCookieValue(cookieValue);
+        console.log(decodedCookieValue);
+
+        if(decodedCookieValue){
+            const cookieValue = JSON.parse(decodedCookieValue);
+            setCookieValue(cookieValue);
+        }
     }, []);
     
     useEffect(()=>{
