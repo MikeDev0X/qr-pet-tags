@@ -63,7 +63,7 @@ export default function Finder() {
         getQrs();
     }, [])
 
-
+    console.log(currentItems);
 
     const createqrs = async (button: string) => {
         let body = {};
@@ -101,7 +101,6 @@ export default function Finder() {
                 const json = await response.json();
                 const status = json.message;
 
-                console.log(status);
                 //update list
                 getQrs();
 
@@ -137,8 +136,8 @@ export default function Finder() {
             </div>
 
             {
-                currentItems.map((e: any, index) => (
-                    <QrString key={index} idQr={e.qrText} isActive={e.isActive} planType={e.planType} />
+                currentItems.map((e: any) => (
+                    <QrString key={e.key} idQr={e.idQr} qrText={e.qrText} isActive={e.isActive} planType={e.planType} />
                 ))
             }
 

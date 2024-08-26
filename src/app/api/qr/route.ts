@@ -132,3 +132,33 @@ export async function GET(request: NextRequest) {
         }
     }
 }
+
+export async function PUT(request: NextRequest) {
+
+    let connection = await mysql.createConnection(connectionParams);
+
+    try {
+
+        let response: NextResponse = NextResponse.json({});
+        const query = `UPDATE ${database}.qr SET isActive = ? WHERE idQr = ?`;
+
+        const {isActive, idQr} = await request.json();
+
+        const [result] = await connection.execute(query, [isActive, idQr]);
+
+        response = NextResponse.json(result);
+        return response;
+
+    } catch (err) {
+        console.error('ERROR: API - ', (err as Error).message);
+
+        return NextResponse.json({
+            error: (err as Error).message,
+            returnedStatus: 500,
+        }, { status: 500 });
+    } finally {
+        if (connection) {
+            connection.end();
+        }
+    }
+}
